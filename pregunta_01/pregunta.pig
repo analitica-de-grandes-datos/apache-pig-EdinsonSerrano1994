@@ -14,16 +14,14 @@ $ pig -x local -f pregunta.pig
 */
 
 -- cargar datos
-datos = LOAD 'data.tvs' USING PigStorage('\t') AS (letter:chararray, date:chararray, value: int);
+data = LOAD 'data.tsv' USING PigStorage('\t') AS (letter:chararray, date:chararray, value:int);
 
-datos_letter = FOREACH datos GENERATE letter;
+letter_data = FOREACH data GENERATE letter;
 
--- agrupar registros
+-- agrupa los registros
+grouped = GROUP letter_data BY letter;
 
-agrupado = GROUP datos_letter BY letter;
+count = FOREACH grouped GENERATE group, COUNT(letter_data);
 
-conteo = FOREACH agrupado GENERATE group, COUNT(datos_letter);
-
--- generar archivo de salida
-
-iSTORE conteo INTO 'output USING PigStorage(',');
+-- escribe el archivo de salida 
+STORE count INTO 'output' USING PigStorage(',');
