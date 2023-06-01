@@ -12,3 +12,18 @@ $ pig -x local -f pregunta.pig
 
         >>> Escriba su respuesta a partir de este punto <<<
 */
+
+-- cargar datos
+datos = LOAD 'data.tvs' USING PigStorage('\t') AS (letter:chararray, date:chararray, value: int);
+
+datos_letter = FOREACH datos GENERATE letter;
+
+-- agrupar registros
+
+agrupado = GROUP datos_letter BY letter;
+
+conteo = FOREACH agrupado GENERATE group, COUNT(datos_letter);
+
+-- generar archivo de salida
+
+iSTORE conteo INTO 'output USING PigStorage(',');
