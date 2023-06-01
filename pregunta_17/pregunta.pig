@@ -30,8 +30,8 @@ datos = LOAD 'data.csv' USING PigStorage(',') AS (
         color:chararray,
         num_2:int);
 
-nombre_color = FOREACH datos GENERATE first_name, color;
+name_color = FOREACH datos GENERATE first_name, color;
 
-filtrar = FILTER nombre_color BY color IN ('blue','black');
+filtered = FILTER name_color BY color IN ('blue','black');
 
-STORE filtrar INTO 'output' USING PigStorage(',');
+STORE filtered INTO 'output' USING PigStorage(',');

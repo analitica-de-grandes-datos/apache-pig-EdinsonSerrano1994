@@ -24,18 +24,16 @@ $ pig -x local -f pregunta.pig
 */
 -- cargar datos
 
-datos = LOAD 'data.csv' USING PigStorage(',')
-    AS (
-            index:int,
-            name:chararray,
-            lastn:chararray,
-            birth:chararray,
-            color:chararray,
-            num:int          
-        ); 
+datos = LOAD 'data.csv' USING PigStorage(',') AS (
+        num_1:int,
+        first_name:chararray,
+        last_name:chararray,
+        date:chararray,
+        color:chararray,
+        num_2:int);
 
-color_datos = FILTER datos BY STARTSWITH(color,'b'); 
+name_color = FOREACH datos GENERATE first_name, color;
 
-seleccionar_datos = FOREACH color_datos GENERATE name, color; 
+filtered = FILTER name_color BY color MATCHES '^b.*';
 
-STORE seleccionar_datos INTO 'output/' USING PigStorage(',');
+STORE filtered INTO 'output' USING PigStorage(',');

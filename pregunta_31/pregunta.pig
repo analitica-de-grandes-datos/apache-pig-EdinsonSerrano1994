@@ -14,3 +14,20 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+´
+-- cargar datos
+
+datos = LOAD 'data.csv' USING PigStorage(',')
+    AS (
+            Id:int,
+            Name:chararray,
+            LastName:chararray,
+            Birth:chararray,
+            color:chararray,
+            value:int
+    );
+
+datos = FOREACH datos GENERATE SUBSTRING(Birth,0,4) as year;
+group_by = GROUP datos BY year;
+contador = FOREACH group_by GENERATE group, COUNT($1);
+STORE contador INTO 'output' USING PigStorage(',');

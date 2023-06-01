@@ -23,16 +23,16 @@ $ pig -x local -f pregunta.pig
 */
 
 -- cargar datos
-datos = LOAD 'data.csv' USING PigStorage(',')
-    AS (
-            Id:int,
-            Name:chararray,
-            LastName:chararray,
-            Birth:chararray,
-            color:chararray,
-            value:int
-    );
+data = LOAD 'data.csv' USING PigStorage(',') AS (
+        num_1:int,
+        first_name:chararray,
+        last_name:chararray,
+        date:chararray,
+        color:chararray,
+        num_2:int);
 
-colortable = FOREACH datos GENERATE color; 
-variable = FILTER colortable BY color matches 'b.*';
-STORE variable INTO 'output' USING PigStorage(',');
+colors = FOREACH data GENERATE color;
+
+filtered_colors = FILTER colors BY color MATCHES 'b.*';
+
+STORE filtered_colors INTO 'output' USING PigStorage(',');
