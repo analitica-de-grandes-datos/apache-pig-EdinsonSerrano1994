@@ -15,17 +15,18 @@ $ pig -x local -f pregunta.pig
 */
 
 -- carga de datos
-datos = LOAD 'data.tsv' USING PigStorage('\t') AS (
+
+data = LOAD 'data.tsv' USING PigStorage('\t') AS (
         letter:chararray, 
         tuples:bag{t:tuple(l_mins:chararray)}, 
         keys:map[]);
 
-flattened = FOREACH datos GENERATE FLATTEN(keys) AS clave;
+flattened = FOREACH data GENERATE FLATTEN(keys) AS clave;
 
-palabras = FOREACH flattened GENERATE $0 AS word;
+words = FOREACH flattened GENERATE $0 AS word;
 
-agrupado = GROUP palabras BY word;
+groupped= GROUP words BY word;
 
-conteo = FOREACH agrupado GENERATE group, COUNT(words);
+counted = FOREACH groupped GENERATE group, COUNT(words);
 
-STORE conteo INTO 'output' USING PigStorage(',');
+STORE counted INTO 'output' USING PigStorage(',');
