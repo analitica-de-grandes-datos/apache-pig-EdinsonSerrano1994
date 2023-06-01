@@ -20,18 +20,18 @@ $ pig -x local -f pregunta.pig
 
         /* >>> Escriba su respuesta a partir de este punto <<< */
 */
+
 -- cargar datos
 
-datos = LOAD 'data.csv' USING PigStorage(',')
-    AS (
-            Id:int,
-            Name:chararray,
-            LastName:chararray,
-            Birth:chararray,
-            color:chararray,
-            value:int
-    );
+datos = LOAD 'data.csv' USING PigStorage(',') AS (numero:int, nombre:CHARARRAY, apellido:CHARARRAY, fecha:CHARARRAY, color:CHARARRAY, num:int);
 
-color_blue = FOREACH datos GENERATE Name, color; 
-variable = FILTER color_blue BY (color=='blue') OR (Name matches 'K.*');
-STORE variable INTO 'output' USING PigStorage(',');
+selectcolor = FOREACH datos GENERATE nombre, color;
+
+--describe selectcolor; 
+
+bcolor = FILTER selectcolor BY ($1 matches '.*blue.*') OR ($0 matches '.*K.*');
+
+--dump bcolor;
+
+-- escribe el archivo de salida en el sistema local
+STORE bcolor INTO 'output' USING PigStorage(',');

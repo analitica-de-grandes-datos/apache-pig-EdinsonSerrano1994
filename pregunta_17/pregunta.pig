@@ -22,16 +22,15 @@ $ pig -x local -f pregunta.pig
 
 -- carga datos
 
-datos = LOAD 'data.csv' USING PigStorage(',') AS (
-        num_1:int,
-        first_name:chararray,
-        last_name:chararray,
-        date:chararray,
-        color:chararray,
-        num_2:int);
+lines = LOAD 'data.csv' USING PigStorage(',') AS (numero:int, nombre:CHARARRAY, apellido:CHARARRAY, fecha:CHARARRAY, color:CHARARRAY, num:int);
 
-name_color = FOREACH datos GENERATE first_name, color;
+selectcolor = FOREACH lines GENERATE nombre, color;
 
-filtered = FILTER name_color BY color IN ('blue','black');
+--describe selectcolor; 
 
-STORE filtered INTO 'output' USING PigStorage(',');
+bcolor = FILTER selectcolor BY color IN ('blue','black');
+
+-- dump bcolor;
+
+-- escribe el archivo de salida en el sistema local
+STORE bcolor INTO 'output' USING PigStorage(',');

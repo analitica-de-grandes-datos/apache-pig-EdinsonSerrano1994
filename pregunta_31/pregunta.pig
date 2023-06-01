@@ -17,7 +17,7 @@ $ pig -x local -f pregunta.pig
 ´
 -- cargar datos
 
-datos = LOAD 'data.csv' USING PigStorage(',')
+data = LOAD 'data.csv' USING PigStorage(',')
     AS (
             Id:int,
             Name:chararray,
@@ -27,7 +27,7 @@ datos = LOAD 'data.csv' USING PigStorage(',')
             value:int
     );
 
-datos = FOREACH datos GENERATE SUBSTRING(Birth,0,4) as year;
-group_by = GROUP datos BY year;
-contador = FOREACH group_by GENERATE group, COUNT($1);
-STORE contador INTO 'output' USING PigStorage(',');
+data = FOREACH data GENERATE SUBSTRING(Birth,0,4) as year;
+group_by = GROUP data BY year;
+counter = FOREACH group_by GENERATE group, COUNT($1);
+STORE counter INTO 'output' USING PigStorage(',');

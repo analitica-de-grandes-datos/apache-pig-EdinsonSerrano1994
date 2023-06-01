@@ -23,16 +23,14 @@ $ pig -x local -f pregunta.pig
 */
 
 -- cargar datos
-data = LOAD 'data.csv' USING PigStorage(',') AS (
-        num_1:int,
-        first_name:chararray,
-        last_name:chararray,
-        date:chararray,
-        color:chararray,
-        num_2:int);
 
-colors = FOREACH data GENERATE color;
+datos = LOAD 'data.csv' USING PigStorage(',') AS (numero:int, nombre:CHARARRAY, apellido:CHARARRAY, fecha:CHARARRAY, color:CHARARRAY, num:int);
 
-filtered_colors = FILTER colors BY color MATCHES 'b.*';
+selectcolor = FOREACH datos GENERATE color;
 
-STORE filtered_colors INTO 'output' USING PigStorage(',');
+bcolor = FILTER selectcolor BY ($0 matches '.*b.*');
+
+--dump selectcolor;
+
+-- escribe el archivo de salida en el sistema local
+STORE bcolor INTO 'output';
